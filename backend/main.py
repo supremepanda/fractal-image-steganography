@@ -20,7 +20,8 @@ def convert_to_binary(data):
     else:
         raise TypeError("Type not supported.")
 
-def encode_image(image_path, secret_data):
+# It encodes image with given secret data and secret key.
+def encode_image(image_path, secret_data, secret_key):
 
     # Reading the image using cv2 module.
     image = cv2.imread(image_path)
@@ -38,9 +39,10 @@ def encode_image(image_path, secret_data):
         raise ValueError("!!! Insufficient bytes, Data to be added should have less size, or image should have more size")
        
     print("*** Encoding data...")
-
+    
     # To understand where secret data finished, stopping flag added.
-    secret_data += "!!!!!"
+    # Secret key adding to secret data.
+    secret_data += secret_key
 
     # Secret data index to travel in our data.
     secret_data_index = 0
@@ -93,4 +95,45 @@ def encode_image(image_path, secret_data):
     # Returning encoded image.
     return image
 
-encode_image("image.jpg", "furkan")
+# It decodes image to show secret data using secret key.
+def decode(image_path, secret_key):
+
+    print("*** Decoding image...")
+
+    # Reading image using python-cv2 module
+    image = cv2.imread(image_path)
+
+    # Creating empty binary secret data variable.
+    binary_secret_data = ""
+
+    # These for loops appends secret bits from the last value of red, green and blue values.
+    for row in image:
+        for pixel in row:
+            red, green, blue = convert_to_binary(pixel)
+            binary_secret_data += red[-1]
+            binary_secret_data += green[-1]
+            binary_secret_data += blue[-1]
+
+    # Splitting all bytes to 8 bit binary form. (like 11111111 11111111 11111111)
+    all_bytes = [ binary_secret_data[i: i+8] for i in range(0, len(binary_secret_data), 8) ]
+
+    # Converting all bytes to their equal chars.
+    decoded_data = ""
+
+    for byte in all_bytes:
+
+        # Converting integers based on 2 to character.
+        decoded_data += chr(int(byte, 2))
+
+        # Checking secret key to understand where the secret data finished.
+        if decoded_data[-len(secret_key):] == secret_key:
+            break
+
+    # Returning secret decoded data.
+    return decoded_data[:-len(secret_key)]
+
+# Creating output encoded image.
+#cv2.imwrite("output_image_name.png", encode_image(image_path = "to_encode_image.png", secret_data = "to_hide_data", secret_key = "secret_key_to_encrypt"))
+
+# Printing decoded secret data
+#print(decode(image_path = "to_decode_image.png", secret_key = "secret_key_to_decrypt"))
