@@ -127,10 +127,11 @@ def decode(image_path, secret_key):
 
         # Checking secret key to understand where the secret data finished.
         if decoded_data[-len(secret_key):] == secret_key:
-            break
 
-    # Returning secret decoded data.
-    return decoded_data[:-len(secret_key)]
+            # Returning secret decoded data.
+            return decoded_data[:-len(secret_key)]
+            
+    return "Secret key wrong!"
 
 # Creating output encoded image.
 #cv2.imwrite("output_image_name.png", encode_image(image_path = "to_encode_image.png", secret_data = "to_hide_data", secret_key = "secret_key_to_encrypt"))
