@@ -16,7 +16,7 @@ def convert_to_binary(data):
         raise TypeError("Type not supported.")
 
 # It encodes image with given secret data and secret key.
-def encode_image(image_path, secret_data, secret_key):
+def encode_image(output_image, image_path, secret_data, secret_key):
 
     # Reading the image using cv2 module.
     image = cv2.imread(image_path)
@@ -24,7 +24,10 @@ def encode_image(image_path, secret_data, secret_key):
     # Calculating maximum byte to encode image.
     # Image has RGB values that they are Red, Green and Blue.
     # Also to calculate total byte count, bytes should be divided to 8 (8-bit binary).
-    byte_count = image.shape[0] * image.shape[1] * 3 // 8
+    try:
+        byte_count = image.shape[0] * image.shape[1] * 3 // 8
+    except AttributeError:
+        return "Image is not valid."
 
     # Printing maximum byte count to encode.
     print("*** Maximum bytes to encode:", byte_count, " ***")
@@ -74,11 +77,11 @@ def encode_image(image_path, secret_data, secret_key):
                 secret_data_index += 1
                 color_index += 1
     
-    # Returning encoded image.
-    return image
+    # Returning boolean to check the image is saved or not
+    return cv2.imwrite(output_image, image)
 
 # It decodes image to show secret data using secret key.
-def decode(image_path, secret_key):
+def decode_image(image_path, secret_key):
 
     print("*** Decoding image...")
 
@@ -116,7 +119,7 @@ def decode(image_path, secret_key):
     return "Secret key wrong!"
 
 # Creating output encoded image.
-#cv2.imwrite("output_image_name.png", encode_image(image_path = "to_encode_image.png", secret_data = "to_hide_data", secret_key = "secret_key_to_encrypt"))
+encode_image(output_image = "output_image_name.png" ,image_path = "resim.png", secret_data = "to_hide_data", secret_key = "secret_key_to_encrypt")
 
 # Printing decoded secret data
-#print(decode(image_path = "to_decode_image.png", secret_key = "secret_key_to_decrypt"))
+print(decode_image(image_path = "output_image_name.png", secret_key = "secret_key_to_encrypt"))
