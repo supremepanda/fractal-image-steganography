@@ -111,7 +111,7 @@ Yapılan yöntem ise; her bir `red`, `green` ve `blue` değerine sırayla yapıl
 
 Decode etme işlemi ile resmimize gizlediğimiz yazı içeriğini gün yüzüne çıkartabilmekteyiz. Decode yapabilmek için nasıl encode edildiğinin bilinmesi gerekiyor. Bizim encode uygulamamızda pixellerdeki RGB değerlerin son bitine veri gizleme yolunu kullanmıştık. En sonuna da `secret_key` kullanarak bittiğini göstermiştik. Bu aşamada yapılacak olan bu kurala göre basit bir arama algoritması kurmak.
 
-Öncelikle secret datamızı en son bitlerde aradığımız için resmin bütün bitlerini elimizde topluyoruz. 
+Öncelikle secret datamızı en son bitlerde aradığımız için resmin bütün son bitlerini elimizde topluyoruz. 
 
     for  row  in  image:
 	    for  pixel  in  row:
