@@ -68,7 +68,7 @@ Binary çevirme kodu:
  - Resim içeriğini bozmamak
  - Veriyi düzgün bir şekilde kayıt edebilmek
 
-Aşama aşama gitmek gerekirse, önce resmin boyutunun hesaplanması ve embed edilecek verinin boyutu arasında karşılaştırmak yapılması gerekmektedir. Bunun sebebi eğer embed yapacağımız yazının resimden daha büyük olması durumunda yazıyı saklamanın mümkün olmamasıdır.
+Aşama aşama gitmek gerekirse, resmin boyutu ve embed edilecek verinin boyutu arasında karşılaştırmak yapılması gerekmektedir. Bunun sebebi eğer embed yapacağımız yazının resimden daha büyük olması durumunda yazıyı saklamanın mümkün olmamasıdır.
 
     image = cv2.imread(image_path)
     byte_count = image.shape[0] * image.shape[1] * 3 // 8
@@ -83,7 +83,7 @@ Bundan sonra `secret_data` nın binary formatına çevirilmesi ile aksiyona baş
 
     binary_secret_data = convert_to_binary(secret_data)
 
-Secret data binary formatına çevirildikten sonra artık elimizde resmin içersini yazılması gerekiyor. Bu amaçla bir resmin içerisindeki her bir pixeli satırlar halinde dizilmiş şekilde düşünmemiz, her bir pikselin de RGB değere sahip olduğunu bilmeliyiz. 
+Secret data binary formatına çevirildikten sonra artık elimizde resmin içerisine gizlenecek verinin yazılması gerekiyor. Bu amaçla bir resmin içerisindeki her bir pixeli satırlar halinde dizilmiş şekilde düşünmemiz, her bir pikselin de RGB değere sahip olduğunu bilmeliyiz. 
 
 Veri gizlemedeki temel fakat en önemli mantık asıl veriyi gözle görülür bir biçimde bozmamak ve veriyi belirli bir kural çerçevesinde pixellere yerleştirmek. 
 
@@ -111,7 +111,7 @@ Yapılan yöntem ise; her bir `red`, `green` ve `blue` değerine sırayla yapıl
 
 Decode etme işlemi ile resmimize gizlediğimiz yazı içeriğini gün yüzüne çıkartabilmekteyiz. Decode yapabilmek için nasıl encode edildiğinin bilinmesi gerekiyor. Bizim encode uygulamamızda pixellerdeki RGB değerlerin son bitine veri gizleme yolunu kullanmıştık. En sonuna da `secret_key` kullanarak bittiğini göstermiştik. Bu aşamada yapılacak olan bu kurala göre basit bir arama algoritması kurmak.
 
-Öncelikle secret datamızı en son bitlerde aradığımız için resmin bütün son bitlerini elimizde topluyoruz. 
+Öncelikle secret datamızı en son bitlerde aradığımız için resmin bütün bitlerini elimizde topluyoruz. 
 
     for  row  in  image:
 	    for  pixel  in  row:
