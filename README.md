@@ -68,16 +68,19 @@ Binary çevirme kodu:
  - Resim içeriğini bozmamak
  - Veriyi düzgün bir şekilde kayıt edebilmek
 
-Aşama aşama gitmek gerekirse, resmin boyutu ve embed edilecek verinin boyutu arasında karşılaştırmak yapılması gerekmektedir. Bunun sebebi eğer embed yapacağımız yazının resimden daha büyük olması durumunda yazıyı saklamanın mümkün olmamasıdır.
+Saklanacak olan verimize onun bittiğine dair bir işaret koyulması gerekli. Bunun sebebi decode ederken elimizde bu `secret_key` olmazsa verinin nerede sonlandığını anlamamız mümkün olmayacaktır. Daha sonra, resmin boyutu ve embed edilecek verinin boyutu arasında karşılaştırma yapılması gerekmektedir. Bunun sebebi eğer embed yapacağımız yazının resimden daha büyük olması durumunda yazıyı saklamanın mümkün olmamasıdır. 
 
     image = cv2.imread(image_path)
-    byte_count = image.shape[0] * image.shape[1] * 3 // 8
-    if  len(secret_data) > byte_count:
-	    raise  ValueError("!!! Insufficient bytes, Data to be added should have less size, or image should have more size")
-
-Tüm şartlar sağlandığı zaman saklanacak olan verimize onun bittiğine dair bir işaret koyulması gerekli. Bunun sebebi decode ederken elimizde bu `secret_key` olmazsa verinin nerede sonlandığını anlamamız mümkün olmayacaktır.
+    try:
+        byte_count = image.shape[0] * image.shape[1] * 3 // 8
+    except AttributeError:
+        return {"status": False, "data": "Image is not valid."}
 
     secret_data += secret_key
+
+    if len(secret_data) > byte_count:
+        return {"status": False, "data": "Insufficient bytes, Data to be added should have less size, or image should have more size"}
+
 
 Bundan sonra `secret_data` nın binary formatına çevirilmesi ile aksiyona başlanıyor.
 
@@ -95,18 +98,15 @@ Yapılan yöntem ise; her bir `red`, `green` ve `blue` değerine sırayla yapıl
     data_len = len(binary_secret_data)
     for  row  in  image:
 	    for  pixel  in  row:
+			color_index = 0
 		    red, green, blue = convert_to_binary(pixel)
-			if  secret_data_index < data_len:
-				pixel[0] = int(red[:-1] + binary_secret_data[secret_data_index], 2)
-				secret_data_index += 1
-			if  secret_data_index < data_len:
-				pixel[1] = int(green[:-1] + binary_secret_data[secret_data_index], 2)
-				secret_data_index += 1
-			if  secret_data_index < data_len:
-				pixel[2] = int(blue[:-1] + binary_secret_data[secret_data_index], 2)
-				secret_data_index += 1
-			if  secret_data_index >= data_len:
-				break
+			for color in [red, green, blue]:
+                if secret_data_index >= data_len:
+                    break
+
+                pixel[color_index] = int(color[:-1] + binary_secret_data[secret_data_index], 2)
+                secret_data_index += 1
+                color_index += 1
 # Decode the Image
 
 Decode etme işlemi ile resmimize gizlediğimiz yazı içeriğini gün yüzüne çıkartabilmekteyiz. Decode yapabilmek için nasıl encode edildiğinin bilinmesi gerekiyor. Bizim encode uygulamamızda pixellerdeki RGB değerlerin son bitine veri gizleme yolunu kullanmıştık. En sonuna da `secret_key` kullanarak bittiğini göstermiştik. Bu aşamada yapılacak olan bu kurala göre basit bir arama algoritması kurmak.
