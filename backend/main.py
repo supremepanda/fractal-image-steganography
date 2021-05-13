@@ -13,7 +13,7 @@ def convert_to_binary(data):
         return format(data, "08b")
     
     else:
-        raise TypeError("Type not supported.")
+        return {"status": False, "data": "Data type is not supported."}
 
 # It encodes image with given secret data and secret key.
 def encode_image(output_image, image_path, secret_data, secret_key):
@@ -27,7 +27,7 @@ def encode_image(output_image, image_path, secret_data, secret_key):
     try:
         byte_count = image.shape[0] * image.shape[1] * 3 // 8
     except AttributeError:
-        return "Image is not valid."
+        return {"status": False, "data": "Image is not valid."}
 
     # Printing maximum byte count to encode.
     print("*** Maximum bytes to encode:", byte_count, " ***")
@@ -38,7 +38,7 @@ def encode_image(output_image, image_path, secret_data, secret_key):
 
     # Raising ValueError exception if our data to be added size greater than image data size.
     if len(secret_data) > byte_count:
-        raise ValueError("!!! Insufficient bytes, Data to be added should have less size, or image should have more size")
+        return {"status": False, "data": "Insufficient bytes, Data to be added should have less size, or image should have more size"}
        
     print("*** Encoding data...")
     
@@ -76,9 +76,12 @@ def encode_image(output_image, image_path, secret_data, secret_key):
                 pixel[color_index] = int(color[:-1] + binary_secret_data[secret_data_index], 2)
                 secret_data_index += 1
                 color_index += 1
-    
-    # Returning boolean to check the image is saved or not
-    return cv2.imwrite(output_image, image)
+
+    # Saving image
+    cv2.imwrite(output_image, image)
+
+    # Returning image
+    return {"status": True, "data": output_image}
 
 # It decodes image to show secret data using secret key.
 def decode_image(image_path, secret_key):
@@ -114,12 +117,12 @@ def decode_image(image_path, secret_key):
         if decoded_data[-len(secret_key):] == secret_key:
 
             # Returning secret decoded data.
-            return decoded_data[:-len(secret_key)]
+            return {"status": True, "data": decoded_data[:-len(secret_key)]}
             
-    return "Secret key wrong!"
+    return {"status": False, "data": "Secret key wrong!"}
 
 # Creating output encoded image.
-encode_image(output_image = "output_image_name.png" ,image_path = "resim.png", secret_data = "to_hide_data", secret_key = "secret_key_to_encrypt")
+#print(encode_image(output_image = "output_image_name.png" ,image_path = "resim.png", secret_data = "to_hide_data", secret_key = "secret_key_to_encrypt"))
 
 # Printing decoded secret data
-print(decode_image(image_path = "output_image_name.png", secret_key = "secret_key_to_encrypt"))
+#print(decode_image(image_path = "output_image_name.png", secret_key = "secret_key_to_encrypt"))
