@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+from PIL import Image
 
 def convert_to_binary(data):
     
@@ -16,7 +17,7 @@ def convert_to_binary(data):
         return {"status": False, "data": "Data type is not supported."}
 
 # It encodes image with given secret data and secret key.
-def encode_image(output_image, image_path, secret_data, secret_key):
+def encode_image(image_path, secret_data, secret_key):
 
     # Reading the image using cv2 module.
     image = cv2.imread(image_path)
@@ -78,7 +79,7 @@ def encode_image(output_image, image_path, secret_data, secret_key):
                 color_index += 1
 
     # Saving image
-    cv2.imwrite(output_image, image)
+    output_image = Image.fromarray(image)
 
     # Returning image
     return {"status": True, "data": output_image}
@@ -120,9 +121,3 @@ def decode_image(image_path, secret_key):
             return {"status": True, "data": decoded_data[:-len(secret_key)]}
             
     return {"status": False, "data": "Secret key wrong!"}
-
-# Creating output encoded image.
-#print(encode_image(output_image = "output_image_name.png" ,image_path = "resim.png", secret_data = "to_hide_data", secret_key = "secret_key_to_encrypt"))
-
-# Printing decoded secret data
-#print(decode_image(image_path = "output_image_name.png", secret_key = "secret_key_to_encrypt"))
