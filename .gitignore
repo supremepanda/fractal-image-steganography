@@ -2,3 +2,4 @@
 .vscode/*
 node_modules/*
 api/__pycache__/*
+backend/__pycache__/*

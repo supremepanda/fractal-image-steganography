@@ -18,7 +18,6 @@ def convert_to_binary(data):
 
 # It encodes image with given secret data and secret key.
 def encode_image(image_path, secret_data, secret_key):
-
     # Reading the image using cv2 module.
     image = cv2.imread(image_path)
 

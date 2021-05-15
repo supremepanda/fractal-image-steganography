@@ -19,10 +19,11 @@ function Index() {
     const body = new FormData();
 
     body.append("image", file);
+
     // body.append('secretKey', secretKey)
     // body.append('secretMessage', secretMessage)
 
-    let res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/main`, {
+    let res = await fetch(`${process.env.REACT_APP_BASE_URL}/`, {
       method: "POST",
       body,
     });
