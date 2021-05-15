@@ -1,70 +1,130 @@
-# Getting Started with Create React App
+# Understanding the Theory of Backend Side
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Stegonagrafi aslında bir yazım yöntemi olması ile birlikte günümüzde veri saklamak gibi amaçlarla kullanılabilmektedir. Bu projede yaptığımız çalışma bir resim içerisine yazı içeriği gömmek ve bunu yaparken resmin gözle görülür bir şekilde değişmesini engellemektir.
 
-## Available Scripts
+Resim üzerine veri saklama üzerine yapılan stegonagrafinin tek bir yöntem ile sınırlandırılabilmesi söz konusu değildir. Fakat resim içeriğinin gözle görülür bir miktarda değişmemesi sebebiyle yapılan işlerin bit derinliğinde olduğunu söyleyebiliriz.
 
-In the project directory, you can run:
+# Basics
 
-### `yarn start`
+Bu konuyu anlamak için öncelikle binary, bit ve byte tanımlarını bilmek gerekiyor.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+`Binary` = 1 ya da 0 olarak kullanılan değerlerdir, bir diğer söyleyiş şekli ile 2 li sistemler denir.
+`Bit` = 1 ya da 0 dır. Binary sistemini kullanarak yazılır. 1 bit en küçük birimdir denilebilir.
+`Byte` = 8 adet 'bit' anlamına gelir. Örnek olarak `10111011` = 1 byte eder.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+# Image Basics
 
-### `yarn test`
+Resim konusu çok detaylı anlatılabilir, farklı yöntemler de vardır, fakat bu projede RGB dediğimiz `red`, `green` ve `blue` renklerinin sayısal değerleri ile hesap yapmaktayız.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1 resim içerisinde binlerce veya milyonlarca pixel bulunmaktadır. Örnek olarak 300x500 lük bir resim içeriği yatayda 300, dikeyde 500 birim olarak toplamda 150000 pixelden oluşur.
 
-### `yarn build`
+Her bir pixel ise kendi içinde red, green ve blue değerlerine sahiptir. Bu değerler genellikle **0-255** arası değerlerdir. Örnek olarak bir pixel:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+    red: 255
+    green: 2
+    blue: 100
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+şeklinde olmaktadır.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# String Basics
 
-### `yarn eject`
+Bu proje için önemli olan bir diğer type `string` dir. String yapı olarak primitive bir type değildir ve bir primitive type olan `char` lardan oluşur.
+`1 char = 1 byte` eder. Bu projenin altın bilgileri arasında yer alır.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+# Stenography Method
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Projede temel olarak 3 farklı fonksiyon kullanılmaktadır. Bunlar
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- Convert To Binary
+- Encode the image with secret data
+- Decode the image
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+# Converting To Binary
 
-## Learn More
+Verilen data yı 8-bit binary şekline çevirme aşamasıdır. Bu sayede yazıdaki bir `char` ve resimdeki `RGB` değerleri aynı formatta olduğundan birlikte işlem yapılabilmektedir.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Örneğin, `supremepanda` = **01110011 01110101 01110000 01110010 01100101 01101101 01100101 01110000 01100001 01101110 01100100 01100001**
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+`222` = **11011110**
 
-### Code Splitting
+eşitlikleri inceleyebilirsiniz.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Binary çevirme kodu:
 
-### Analyzing the Bundle Size
+    def  convert_to_binary(data):
+        if  isinstance(data, str):
+    	    return  ''.join([ format(ord(i), "08b") for i in data ])
+        elif  isinstance(data, bytes) or  isinstance(data, np.ndarray):
+    	    return [ format(i, "08b") for i in data ]
+        elif  isinstance(data, int) or  isinstance(data, np.uint8):
+    		return  format(data, "08b")
+    	else:
+    		raise  TypeError("Type not supported.")
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+# Encode the Image with Secret Data
 
-### Making a Progressive Web App
+Resim üzerinde yapılan encode işleminin temelde iki önemli koşulu var:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- Resim içeriğini bozmamak
+- Veriyi düzgün bir şekilde kayıt edebilmek
 
-### Advanced Configuration
+Saklanacak olan verimize onun bittiğine dair bir işaret koyulması gerekli. Bunun sebebi decode ederken elimizde bu `secret_key` olmazsa verinin nerede sonlandığını anlamamız mümkün olmayacaktır. Daha sonra, resmin boyutu ve embed edilecek verinin boyutu arasında karşılaştırma yapılması gerekmektedir. Bunun sebebi eğer embed yapacağımız yazının resimden daha büyük olması durumunda yazıyı saklamanın mümkün olmamasıdır.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+    image = cv2.imread(image_path)
+    try:
+        byte_count = image.shape[0] * image.shape[1] * 3 // 8
+    except AttributeError:
+        return {"status": False, "data": "Image is not valid."}
 
-### Deployment
+    secret_data += secret_key
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+    if len(secret_data) > byte_count:
+        return {"status": False, "data": "Insufficient bytes, Data to be added should have less size, or image should have more size"}
 
-### `yarn build` fails to minify
+Bundan sonra `secret_data` nın binary formatına çevirilmesi ile aksiyona başlanıyor.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+    binary_secret_data = convert_to_binary(secret_data)
+
+Secret data binary formatına çevirildikten sonra artık elimizde resmin içerisine gizlenecek verinin yazılması gerekiyor. Bu amaçla bir resmin içerisindeki her bir pixeli satırlar halinde dizilmiş şekilde düşünmemiz, her bir pikselin de RGB değere sahip olduğunu bilmeliyiz.
+
+Veri gizlemedeki temel fakat en önemli mantık asıl veriyi gözle görülür bir biçimde bozmamak ve veriyi belirli bir kural çerçevesinde pixellere yerleştirmek.
+
+Yapılan yöntem ise; her bir `red`, `green` ve `blue` değerine sırayla yapılıyor.
+
+Örneğin red değerimiz decimal olarak 255 olsun. 255 in 8-bit binary karşılığı **11111111** Bizim gizlemek istediğimiz verimizin ilk biti ise **0** olsun. Yeni `red` değerimiz 1111111**0** olacaktır. Bu işlem saklayacağımız veri tükenene kadar devam eder.
+secret_data_index = 0
+data_len = len(binary_secret_data)
+for row in image:
+for pixel in row:
+color_index = 0
+red, green, blue = convert_to_binary(pixel)
+for color in [red, green, blue]:
+if secret_data_index >= data_len:
+break
+
+                pixel[color_index] = int(color[:-1] + binary_secret_data[secret_data_index], 2)
+                secret_data_index += 1
+                color_index += 1
+
+# Decode the Image
+
+Decode etme işlemi ile resmimize gizlediğimiz yazı içeriğini gün yüzüne çıkartabilmekteyiz. Decode yapabilmek için nasıl encode edildiğinin bilinmesi gerekiyor. Bizim encode uygulamamızda pixellerdeki RGB değerlerin son bitine veri gizleme yolunu kullanmıştık. En sonuna da `secret_key` kullanarak bittiğini göstermiştik. Bu aşamada yapılacak olan bu kurala göre basit bir arama algoritması kurmak.
+
+Öncelikle secret datamızı en son bitlerde aradığımız için resmin bütün bitlerini elimizde topluyoruz.
+
+    for  row  in  image:
+        for  pixel  in  row:
+    	    red, green, blue = convert_to_binary(pixel)
+    		    binary_secret_data += red[-1]
+    		    binary_secret_data += green[-1]
+    		    binary_secret_data += blue[-1]
+
+Daha sonra elimizde binary cinsinden datayı 8-bit şeklinde split etmemiz gerekiyor. Bunun sebebi split edilen her 8 lik byte bir karakter edecek, ve o karakterler bizim gizli verimizin parçaları.
+
+    all_bytes = [ binary_secret_data[i: i+8] for  i  in  range(0, len(binary_secret_data), 8) ]
+    decoded_data = ""
+    for  byte  in  all_bytes:
+    	decoded_data += chr(int(byte, 2))
+    	if  decoded_data[-len(secret_key):] == secret_key:
+    		break
+    return  decoded_data[:-len(secret_key)]
