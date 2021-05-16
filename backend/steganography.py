@@ -3,22 +3,16 @@ import cv2
 from PIL import Image
 
 def convert_to_binary(data):
-    
     if isinstance(data, str):
         return ''.join([ format(ord(i), "08b") for i in data ])
-
     elif isinstance(data, bytes) or isinstance(data, np.ndarray):
         return [ format(i, "08b") for i in data ]
-
     elif isinstance(data, int) or isinstance(data, np.uint8):
         return format(data, "08b")
-    
     else:
         return {"status": False, "data": "Data type is not supported."}
 
-# It encodes image with given secret data and secret key.
 def encode_image(image_path, secret_data, secret_key):
-    # Reading the image using cv2 module.
     image = cv2.imread(image_path)
 
     # Calculating maximum byte to encode image.
@@ -29,26 +23,19 @@ def encode_image(image_path, secret_data, secret_key):
     except AttributeError:
         return {"status": False, "data": "Image is not valid."}
 
-    # Printing maximum byte count to encode.
     print("*** Maximum bytes to encode:", byte_count, " ***")
 
     # To understand where secret data finished, stopping flag added.
     # Secret key adding to secret data.
     secret_data += secret_key
 
-    # Raising ValueError exception if our data to be added size greater than image data size.
     if len(secret_data) > byte_count:
         return {"status": False, "data": "Insufficient bytes, Data to be added should have less size, or image should have more size"}
        
     print("*** Encoding data...")
     
-    # Secret data index to travel in our data.
     secret_data_index = 0
-
-    # Converting our secret data to binary.
     binary_secret_data = convert_to_binary(secret_data)
-
-    # Size of binary secret data.
     data_len = len(binary_secret_data)
 
     # The idea of these for loops is accessing each pixel of image
@@ -56,13 +43,10 @@ def encode_image(image_path, secret_data, secret_key):
     # And adds 1 bit secret data per RGB pixel arrays.
     for row in image:
         for pixel in row:
-            
             color_index = 0
-
-            # Converting and splitting pixels to binary as RGB values.
             red, green, blue = convert_to_binary(pixel)
             
-            # While secret data index is lesser than lenght of data
+            # While secret data index is lesser than length of data
             # Each RGB values go through same process.
             # To understand pixel indexes, 0 = red, 1 = green and 2 = blue.
             # Each value become equal the color + secret data bit.
@@ -77,21 +61,15 @@ def encode_image(image_path, secret_data, secret_key):
                 secret_data_index += 1
                 color_index += 1
 
-    # Saving image
     output_image = Image.fromarray(image)
 
-    # Returning image
     return {"status": True, "data": output_image}
 
-# It decodes image to show secret data using secret key.
 def decode_image(image_path, secret_key):
-
     print("*** Decoding image...")
 
-    # Reading image using python-cv2 module
     image = cv2.imread(image_path)
 
-    # Creating empty binary secret data variable.
     binary_secret_data = ""
 
     # These for loops appends secret bits from the last value of red, green and blue values.
@@ -103,20 +81,14 @@ def decode_image(image_path, secret_key):
             binary_secret_data += blue[-1]
 
     # Splitting all bytes to 8 bit binary form. (like 11111111 11111111 11111111)
-    all_bytes = [ binary_secret_data[i: i+8] for i in range(0, len(binary_secret_data), 8) ]
+    all_bytes = [binary_secret_data[i: i + 8] for i in range(0, len(binary_secret_data), 8)]
 
-    # Converting all bytes to their equal chars.
     decoded_data = ""
 
     for byte in all_bytes:
-
-        # Converting integers based on 2 to character.
         decoded_data += chr(int(byte, 2))
 
-        # Checking secret key to understand where the secret data finished.
         if decoded_data[-len(secret_key):] == secret_key:
-
-            # Returning secret decoded data.
             return {"status": True, "data": decoded_data[:-len(secret_key)]}
             
     return {"status": False, "data": "Secret key wrong!"}
