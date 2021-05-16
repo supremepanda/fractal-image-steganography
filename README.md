@@ -1,39 +1,42 @@
 # Understanding the Theory of Backend Side
 
-Stegonagrafi aslında bir yazım yöntemi olması ile birlikte günümüzde veri saklamak gibi amaçlarla kullanılabilmektedir. Bu projede yaptığımız çalışma bir resim içerisine yazı içeriği gömmek ve bunu yaparken resmin gözle görülür bir şekilde değişmesini engellemektir.
+Steganography is the art and science of storing information by embedding the message.
+It comes from the Greek word «steganos».
+It can also be defined as hiding data inside an object.
 
-Resim üzerine veri saklama üzerine yapılan stegonagrafinin tek bir yöntem ile sınırlandırılabilmesi söz konusu değildir. Fakat resim içeriğinin gözle görülür bir miktarda değişmemesi sebebiyle yapılan işlerin bit derinliğinde olduğunu söyleyebiliriz.
+Steganography is divided into two as Linguistics Steganography and Technical Steganography. Technical steganography can be collected under headings such as microdots and computer-based methods. Computer-based methods are methods of hiding data using text, sound, image, image, video files.
 
-# Basics
+The work we have done in this project is to embed text content in a picture and prevent the picture from changing visibly while doing this.
+We can say that the work done is bit-deep, since the picture content does not change noticeably.
 
-Bu konuyu anlamak için öncelikle binary, bit ve byte tanımlarını bilmek gerekiyor.
+# Basic Concepts
 
-`Binary` = 1 ya da 0 olarak kullanılan değerlerdir, bir diğer söyleyiş şekli ile 2 li sistemler denir.
-`Bit` = 1 ya da 0 dır. Binary sistemini kullanarak yazılır. 1 bit en küçük birimdir denilebilir.
-`Byte` = 8 adet 'bit' anlamına gelir. Örnek olarak `10111011` = 1 byte eder.
+'Binary' = is a 2 number system. It is expressed using 0 and 1.
+`Bit` = Bits have only two possible values: 0 and 1. Therefore, a binary number consists of 0 and 1 only.
+`Byte` = is a unit of measure consisting of 1 or 0 values along an 8-bit sequence.
 
 # Image Basics
 
-Resim konusu çok detaylı anlatılabilir, farklı yöntemler de vardır, fakat bu projede RGB dediğimiz `red`, `green` ve `blue` renklerinin sayısal değerleri ile hesap yapmaktayız.
+Embedding text in the picture and while doing this prevents the picture from changing noticeably, called RGB
+We calculate with the numerical values of the colors "red", "green", "blue".
 
-1 resim içerisinde binlerce veya milyonlarca pixel bulunmaktadır. Örnek olarak 300x500 lük bir resim içeriği yatayda 300, dikeyde 500 birim olarak toplamda 150000 pixelden oluşur.
+There are thousands or millions of pixels in 1 picture. For example, a 300x500 image content consists of 300 horizontally and 500 units vertically, in total 150000 pixels.
 
-Her bir pixel ise kendi içinde red, green ve blue değerlerine sahiptir. Bu değerler genellikle **0-255** arası değerlerdir. Örnek olarak bir pixel:
+Each pixel has red, green and blue values in itself. These values are usually between ** 0-255 **. For instance, a pixel:
 
     red: 255
     green: 2
     blue: 100
 
-şeklinde olmaktadır.
-
 # String Basics
 
-Bu proje için önemli olan bir diğer type `string` dir. String yapı olarak primitive bir type değildir ve bir primitive type olan `char` lardan oluşur.
-`1 char = 1 byte` eder. Bu projenin altın bilgileri arasında yer alır.
+Another important type is "string". String is not a primitive type in structure and consists of `char`s, which are a primitive type.
+
+`1 char = 1 byte`
 
 # Stenography Method
 
-Projede temel olarak 3 farklı fonksiyon kullanılmaktadır. Bunlar
+Basically 3 different functions are used in the project. These are 
 
 - Convert To Binary
 - Encode the image with secret data
@@ -41,15 +44,13 @@ Projede temel olarak 3 farklı fonksiyon kullanılmaktadır. Bunlar
 
 # Converting To Binary
 
-Verilen data yı 8-bit binary şekline çevirme aşamasıdır. Bu sayede yazıdaki bir `char` ve resimdeki `RGB` değerleri aynı formatta olduğundan birlikte işlem yapılabilmektedir.
+It converts the given data to an 8-bit binary. In this way, since the "char" in the text and the "RGB" values in the picture are in the same format, they can be processed together.
 
-Örneğin, `supremepanda` = **01110011 01110101 01110000 01110010 01100101 01101101 01100101 01110000 01100001 01101110 01100100 01100001**
+For Example: `supremepanda` = **01110011 01110101 01110000 01110010 01100101 01101101 01100101 01110000 01100001 01101110 01100100 01100001**
 
 `222` = **11011110**
 
-eşitlikleri inceleyebilirsiniz.
-
-Binary çevirme kodu:
+Binary Convert Method:
 
     def  convert_to_binary(data):
         if  isinstance(data, str):
@@ -63,12 +64,12 @@ Binary çevirme kodu:
 
 # Encode the Image with Secret Data
 
-Resim üzerinde yapılan encode işleminin temelde iki önemli koşulu var:
+There are basically two important conditions for the encoding process on the picture. These are:
 
-- Resim içeriğini bozmamak
-- Veriyi düzgün bir şekilde kayıt edebilmek
+- Not spoiling the picture content
+- To be able to record data properly
 
-Saklanacak olan verimize onun bittiğine dair bir işaret koyulması gerekli. Bunun sebebi decode ederken elimizde bu `secret_key` olmazsa verinin nerede sonlandığını anlamamız mümkün olmayacaktır. Daha sonra, resmin boyutu ve embed edilecek verinin boyutu arasında karşılaştırma yapılması gerekmektedir. Bunun sebebi eğer embed yapacağımız yazının resimden daha büyük olması durumunda yazıyı saklamanın mümkün olmamasıdır.
+It is necessary to put a sign that it is finished in our data to be stored. The reason for this is that while doing the decode process, we will not be able to understand where the data will end if there is no "secret_key". Next, a comparison should be made between the size of the image and the size of the data to be embedded. The reason for this is that if the text we embed is larger than the image, it is not possible to hide the text.
 
     image = cv2.imread(image_path)
     try:
@@ -81,17 +82,18 @@ Saklanacak olan verimize onun bittiğine dair bir işaret koyulması gerekli. Bu
     if len(secret_data) > byte_count:
         return {"status": False, "data": "Insufficient bytes, Data to be added should have less size, or image should have more size"}
 
-Bundan sonra `secret_data` nın binary formatına çevirilmesi ile aksiyona başlanıyor.
+After that, the action starts with the conversion of 'secret_data' to binary format.
 
-    binary_secret_data = convert_to_binary(secret_data)
+	binary_secret_data = convert_to_binary(secret_data)
 
-Secret data binary formatına çevirildikten sonra artık elimizde resmin içerisine gizlenecek verinin yazılması gerekiyor. Bu amaçla bir resmin içerisindeki her bir pixeli satırlar halinde dizilmiş şekilde düşünmemiz, her bir pikselin de RGB değere sahip olduğunu bilmeliyiz.
+After the Secret data is converted to binary format, we now need to write the data to be hidden in the picture. For this purpose, we should think of each pixel in a picture as lined up in rows, and we should know that each pixel also has RGB value.
 
-Veri gizlemedeki temel fakat en önemli mantık asıl veriyi gözle görülür bir biçimde bozmamak ve veriyi belirli bir kural çerçevesinde pixellere yerleştirmek.
+The basic and most important logic in data hiding is to not distort the data visibly and to pixel the data within a certain rule.
 
-Yapılan yöntem ise; her bir `red`, `green` ve `blue` değerine sırayla yapılıyor.
+The method used is; applied to each of the "red", "green" and "blue" values in turn.
 
-Örneğin red değerimiz decimal olarak 255 olsun. 255 in 8-bit binary karşılığı **11111111** Bizim gizlemek istediğimiz verimizin ilk biti ise **0** olsun. Yeni `red` değerimiz 1111111**0** olacaktır. Bu işlem saklayacağımız veri tükenene kadar devam eder.
+For example: let our red value be 255 as decimal. 8-bit binary equivalent of 255 ** 11111111 **. The first bit of the data we want to hide is ** 0 **. Our new `red` value will be 1111111 ** 0 **. This process continues until the data we store is exhausted.
+
 secret_data_index = 0
 data_len = len(binary_secret_data)
 for row in image:
@@ -108,9 +110,9 @@ break
 
 # Decode the Image
 
-Decode etme işlemi ile resmimize gizlediğimiz yazı içeriğini gün yüzüne çıkartabilmekteyiz. Decode yapabilmek için nasıl encode edildiğinin bilinmesi gerekiyor. Bizim encode uygulamamızda pixellerdeki RGB değerlerin son bitine veri gizleme yolunu kullanmıştık. En sonuna da `secret_key` kullanarak bittiğini göstermiştik. Bu aşamada yapılacak olan bu kurala göre basit bir arama algoritması kurmak.
+With the decoding process, we can reveal the content of the text that we have hidden in our picture. In order to decode, it is necessary to know how it is encoded. In our encode application, we used the way of hiding data to the last bit of RGB values in pixels. At the end, we showed that it was done by using 'secret_key'. At this stage, what will be done is to set up a simple search algorithm according to this rule.
 
-Öncelikle secret datamızı en son bitlerde aradığımız için resmin bütün bitlerini elimizde topluyoruz.
+First of all, we collect all the bits of the picture in our hands, since we are looking for our secret data in the last bits.
 
     for  row  in  image:
         for  pixel  in  row:
@@ -119,7 +121,7 @@ Decode etme işlemi ile resmimize gizlediğimiz yazı içeriğini gün yüzüne 
     		    binary_secret_data += green[-1]
     		    binary_secret_data += blue[-1]
 
-Daha sonra elimizde binary cinsinden datayı 8-bit şeklinde split etmemiz gerekiyor. Bunun sebebi split edilen her 8 lik byte bir karakter edecek, ve o karakterler bizim gizli verimizin parçaları.
+Then we need to split the binary data into 8-bit format. This is because every  byte which has 8-bit, split will be one character, and those characters will be part of our hidden data.
 
     all_bytes = [ binary_secret_data[i: i+8] for  i  in  range(0, len(binary_secret_data), 8) ]
     decoded_data = ""
@@ -128,3 +130,5 @@ Daha sonra elimizde binary cinsinden datayı 8-bit şeklinde split etmemiz gerek
     	if  decoded_data[-len(secret_key):] == secret_key:
     		break
     return  decoded_data[:-len(secret_key)]
+
+ 
