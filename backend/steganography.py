@@ -1,19 +1,21 @@
 import numpy as np
 import cv2
-from PIL import Image
+import base64
 
 def convert_to_binary(data):
     if isinstance(data, str):
         return ''.join([ format(ord(i), "08b") for i in data ])
     elif isinstance(data, bytes) or isinstance(data, np.ndarray):
-        return [ format(i, "08b") for i in data ]
+        return [format(i, "08b") for i in data[:3]]
     elif isinstance(data, int) or isinstance(data, np.uint8):
         return format(data, "08b")
     else:
         return {"status": False, "data": "Data type is not supported."}
 
 def encode_image(image_path, secret_data, secret_key):
-    image = cv2.imread(image_path)
+    filestr = image_path.read()
+    npimg = np.fromstring(filestr, np.uint8)
+    image = cv2.imdecode(npimg, cv2.IMREAD_UNCHANGED)
 
     # Calculating maximum byte to encode image.
     # Image has RGB values that they are Red, Green and Blue.
@@ -61,7 +63,8 @@ def encode_image(image_path, secret_data, secret_key):
                 secret_data_index += 1
                 color_index += 1
 
-    output_image = Image.fromarray(image)
+    # TODO: Change encoding file type to whatever it comes
+    output_image = base64.b64encode(cv2.imencode('.jpg', image)[1]).decode()
 
     return {"status": True, "data": output_image}
 

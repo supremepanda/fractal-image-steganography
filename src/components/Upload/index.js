@@ -30,7 +30,10 @@ function Index() {
 
     res = await res.json();
 
-    console.log("rest", res);
+    // var image = new Image();
+    // image.src = `data:image/png;base64,${res.type}`;
+    // document.body.appendChild(image);
+
     message.success(`${file.name} file uploaded successfully`);
 
     setFileList(
