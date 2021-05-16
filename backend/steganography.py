@@ -71,7 +71,9 @@ def encode_image(image_path, secret_data, secret_key):
 def decode_image(image_path, secret_key):
     print("*** Decoding image...")
 
-    image = cv2.imread(image_path)
+    filestr = image_path.read()
+    npimg = np.fromstring(filestr, np.uint8)
+    image = cv2.imdecode(npimg, cv2.IMREAD_UNCHANGED)
 
     binary_secret_data = ""
 
