@@ -1,77 +1,53 @@
 import { useState } from "react";
-import { Upload, message } from "antd";
+import { Upload, Typography } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 
-function Index() {
-  const [fileList, setFileList] = useState([]);
-  const [secretKey, setSecretKey] = useState("");
-  const [secretMessage, setSecretMessage] = useState("");
+import { checkFileType, getBase64, noop } from "../../helper";
+import "./style.css";
 
-  const downloadImage = ({ thumbUrl, name }) => {
-    const imageAnchor = document.createElement("a");
+function Index({ onUpload }) {
+  const [imageUrl, setImageUrl] = useState("");
 
-    imageAnchor.href = thumbUrl;
-    imageAnchor.download = name;
-    imageAnchor.click();
+  const handleChange = (info) => {
+    getBase64(info.file.originFileObj, setImageUrl);
+    onUpload(info.file);
   };
 
-  const uploadImage = async ({ file }) => {
-    const body = new FormData();
-
-    body.append("image", file);
-
-    // body.append('secretKey', secretKey)
-    // body.append('secretMessage', secretMessage)
-
-    let res = await fetch(`${process.env.REACT_APP_BASE_URL}/`, {
-      method: "POST",
-      body,
-    });
-
-    res = await res.json();
-
-    // var image = new Image();
-    // image.src = `data:image/png;base64,${res.type}`;
-    // document.body.appendChild(image);
-
-    message.success(`${file.name} file uploaded successfully`);
-
-    setFileList(
-      fileList.map((file) => {
-        file.status = "done";
-        file.url = file.thumbUrl;
-
-        return file;
-      })
+  const handleBeforeUpload = (file) =>
+    checkFileType(
+      file,
+      ["image/jpg", "image/png", "image/jpeg"],
+      "You can only upload JPG/PNG file!"
     );
 
-    return true;
-  };
-
-  const onChange = ({ fileList }) => setFileList(fileList);
-
-  const props = {
-    fileList,
-    onChange,
-    onPreview: downloadImage,
-    name: "file",
-    listType: "picture",
-    customRequest: uploadImage,
-  };
-
   return (
-    <Upload.Dragger {...props}>
-      <p className="ant-upload-drag-icon">
-        <InboxOutlined />
-      </p>
-      <p className="ant-upload-text">
-        Click or drag file to this area to upload
-      </p>
-      <p className="ant-upload-hint">
-        Support for a single or bulk upload. Strictly prohibit from uploading
-        company data or other band files
-      </p>
-    </Upload.Dragger>
+    <Upload
+      listType="picture-card"
+      showUploadList={false}
+      customRequest={noop}
+      beforeUpload={handleBeforeUpload}
+      onChange={handleChange}
+      className="upload-area"
+    >
+      {imageUrl ? (
+        <img src={imageUrl} alt="Uploaded image" className="uploaded-image" />
+      ) : (
+        <div style={{ width: "100%" }}>
+          <InboxOutlined
+            className="upload-icon"
+            style={{ color: "#1890ff", fontSize: 36 }}
+          />
+          <div style={{ marginTop: 16 }}>
+            <Typography.Title level={4}>
+              Click or drag file to this area to upload
+            </Typography.Title>
+            <Typography.Text type="secondary">
+              You can only upload JPG/JPEG/PNG file
+            </Typography.Text>
+          </div>
+        </div>
+      )}
+    </Upload>
   );
 }
 

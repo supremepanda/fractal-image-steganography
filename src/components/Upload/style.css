@@ -1,0 +1,10 @@
+.upload-area,
+.uploaded-image {
+  width: 100%;
+}
+
+.upload-area .ant-upload-select-picture-card {
+  overflow: hidden;
+  width: 100% !important;
+  height: 192px !important;
+}

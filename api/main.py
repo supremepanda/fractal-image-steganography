@@ -9,10 +9,24 @@ import steganography
 app = Flask(__name__)
 CORS(app)
 
-@app.route("/", methods=['POST'])
-def hello():
-	file = request.files['image']
-	image = steganography.encode_image(file, 'ahmet', 'mehmet')['data']
-	response = { "type": image }
+@app.route("/encode", methods=['POST'])
+def encode():
+	print(request.args)
+	file = request.files['file']
+	secretKey = request.form['secretKey']
+	secretMessage = request.form['secretMessage']
+
+	requestObj = steganography.encode_image(file, secretKey, secretMessage)
+	response = { "status": requestObj['status'], 'data': requestObj['data'] }
+
+	return response
+
+@app.route("/decode", methods=['POST'])
+def decode():
+	file = request.files['file']
+	secretKey = request.form['secretKey']
+
+	requestObj = steganography.decode_image(file, secretKey)
+	response = { "status": requestObj['status'], 'data': requestObj['data'] }
 
 	return response
