@@ -16,7 +16,7 @@ def encode():
 	secretKey = request.form['secretKey']
 	secretMessage = request.form['secretMessage']
 
-	requestObj = steganography.encode_image(file, secretKey, secretMessage)
+	requestObj = steganography.encode_image(file, secretMessage, secretKey)
 	response = { "status": requestObj['status'], 'data': requestObj['data'] }
 
 	return response
