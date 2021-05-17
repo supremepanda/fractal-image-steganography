@@ -11,13 +11,13 @@ We can say that the work done is bit-deep, since the picture content does not ch
 
 # Basic Concepts
 
-'Binary' = is a 2 number system. It is expressed using 0 and 1.
+`Binary` = is a 2 number system. It is expressed using 0 and 1.
 `Bit` = Bits have only two possible values: 0 and 1. Therefore, a binary number consists of 0 and 1 only.
 `Byte` = is a unit of measure consisting of 1 or 0 values along an 8-bit sequence.
 
 # Image Basics
 
-Embedding text in the picture and while doing this prevents the picture from changing noticeably, called RGB
+Embedding text in the picture and while doing this preventing the picture from changing noticeably, called RGB.
 We calculate with the numerical values of the colors "red", "green", "blue".
 
 There are thousands or millions of pixels in 1 picture. For example, a 300x500 image content consists of 300 horizontally and 500 units vertically, in total 150000 pixels.
@@ -94,15 +94,16 @@ The method used is; applied to each of the "red", "green" and "blue" values in t
 
 For example: let our red value be 255 as decimal. 8-bit binary equivalent of 255 ** 11111111 **. The first bit of the data we want to hide is ** 0 **. Our new `red` value will be 1111111 ** 0 **. This process continues until the data we store is exhausted.
 
-secret_data_index = 0
-data_len = len(binary_secret_data)
-for row in image:
-for pixel in row:
-color_index = 0
-red, green, blue = convert_to_binary(pixel)
-for color in [red, green, blue]:
-if secret_data_index >= data_len:
-break
+                
+                secret_data_index = 0
+                data_len = len(binary_secret_data)
+                for row in image:
+                for pixel in row:
+                color_index = 0
+                red, green, blue = convert_to_binary(pixel)
+                for color in [red, green, blue]:
+                if secret_data_index >= data_len:
+                break
 
                 pixel[color_index] = int(color[:-1] + binary_secret_data[secret_data_index], 2)
                 secret_data_index += 1
@@ -131,4 +132,15 @@ Then we need to split the binary data into 8-bit format. This is because every  
     		break
     return  decoded_data[:-len(secret_key)]
 
- 
+
+# In Conclusion
+
+In order to realize the Steganography, we first convert the text to char and the image to RGB format. In this way, we can work on them together. Then, by performing the encoding process, we protect the content of the picture and ensure that the data is recorded.
+By giving a "secret key" to the end of our data to be stored, we decide where the data will end. Then we compare the size of the image and the size of the data to be embedded to make sure the text can be embedded.
+In the decode process, we ensure that the data we embed in the picture can be displayed again.
+
+
+
+
+
+

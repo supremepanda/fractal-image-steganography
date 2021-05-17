@@ -1,8 +1,8 @@
 # Understanding the Theory of Backend Side
 
-• Steganografi, mesajı gömme yoluyla bilgiyi saklama sanatı ve bilimidir. 
+Steganografi, mesajı gömme yoluyla bilgiyi saklama sanatı ve bilimidir. 
 Yunanca «steganos» kelimesinden gelmektedir.
-• Bir nesnenin içerisine bir verinin gizlenmesi olarak da tanımlanabilir.
+Bir nesnenin içerisine bir verinin gizlenmesi olarak da tanımlanabilir.
 
 Steganografi, Dilbilim Steganografi ve Teknik Steganografi olmak üzere kendi içerisinde ikiye ayrılmaktadır. Teknik steganografi microdot'lar ve bilgisayar tabanlı yöntemler gibi başlıklar altında toplanabilmektedir. Bilgisayar tabanlı yöntemler metin, ses, görüntü, resim,video dosyalarını kullanarak veri gizleme yöntemleridir.
 
@@ -100,15 +100,15 @@ Yapılan yöntem ise; her bir `red`, `green` ve `blue` değerlerine sırayla uyg
 
 Örneğin: red değerimiz decimal olarak 255 olsun. 255 nin 8-bit binary karşılığı **11111111**. Bizim gizlemek istediğimiz verimizin ilk biti ise **0** olsun. Yeni `red` değerimiz 1111111**0** olacaktır. Bu işlem saklayacağımız veri tükenene kadar devam eder.
 
-secret_data_index = 0
-data_len = len(binary_secret_data)
-for row in image:
-for pixel in row:
-color_index = 0
-red, green, blue = convert_to_binary(pixel)
-for color in [red, green, blue]:
-if secret_data_index >= data_len:
-break
+				secret_data_index = 0
+				data_len = len(binary_secret_data)
+				for row in image:
+				for pixel in row:
+				color_index = 0
+				red, green, blue = convert_to_binary(pixel)
+				for color in [red, green, blue]:
+				if secret_data_index >= data_len:
+				break
 
                 pixel[color_index] = int(color[:-1] + binary_secret_data[secret_data_index], 2)
                 secret_data_index += 1
@@ -136,4 +136,14 @@ Daha sonra elimizde binary cinsinden datayı 8-bit şeklinde split etmemiz gerek
     	if  decoded_data[-len(secret_key):] == secret_key:
     		break
     return  decoded_data[:-len(secret_key)]
+
+# Kısa Özet
+
+Steganografi’yi gerçekleştirebilmek için öncelikle yazıyı char’a ve resmi RGB formatına çeviririz. Bu sayede birlikte işlem yapabiliriz. Daha sonra encode işlemini gerçekleştirerek resmin içeriğini koruyup, verinin kayıt olmasını sağlarız.
+Saklanacak verimizin sonuna bir ‘secret key’ vererek gömeceğimiz verinin nerede son bulacağını kararlaştırmış oluruz. Daha sonra resmin boyutu ve embed edilecek verinin boyutunu karşılaştırıp yazının gömülebileceğinden emin oluruz.
+Decode işleminde ise resmin içine gömdüğümüz veriyi tekrar görüntüleyebilmeyi sağlarız.
+
+
+
+
  
