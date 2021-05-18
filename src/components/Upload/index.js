@@ -13,12 +13,15 @@ function Index({ onUpload }) {
     onUpload(info.file);
   };
 
-  const handleBeforeUpload = (file) =>
-    checkFileType(
+  const handleBeforeUpload = (file) => {
+    const isValid = checkFileType(
       file,
       ["image/jpg", "image/png", "image/jpeg"],
       "You can only upload JPG/PNG file!"
     );
+
+    return isValid ? isValid : Upload.LIST_IGNORE;
+  };
 
   return (
     <Upload

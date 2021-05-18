@@ -4,13 +4,15 @@ import { Form, Input, Button, Row, Col, message, Typography } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 
 import Upload from "../../components/Upload";
+import { Type } from "./constants";
 
 function Index({ type, title }) {
   const [form] = Form.useForm();
 
-  const [isLoading, setLoading] = useState(false);
   const [file, setFile] = useState("");
-  const [resultImage, setResultImage] = useState("");
+  const [isLoading, setLoading] = useState(false);
+  const [encodedImage, setEncodedImage] = useState("");
+  const [decodedMessage, setDecodedMessage] = useState("");
 
   useEffect(() => {
     form.resetFields();
@@ -20,7 +22,8 @@ function Index({ type, title }) {
   const resetForm = () => {
     setLoading(false);
     setFile("");
-    setResultImage("");
+    setDecodedMessage("");
+    setEncodedImage("");
   };
 
   const onSubmit = async ({ secretKey, secretMessage }) => {
@@ -33,7 +36,7 @@ function Index({ type, title }) {
     body.append("file", file.originFileObj);
     body.append("secretKey", secretKey);
 
-    if (type === "encode") {
+    if (type === Type.ENCODE) {
       body.append("secretMessage", secretMessage);
       endpoint = "/encode";
     }
@@ -45,20 +48,21 @@ function Index({ type, title }) {
 
     response = await response.json();
 
-    if (type === "encode") {
-      const imageUrl = `data:image/png;base64,${response.data}`;
-      // const requestedImage = new Image();
-      // requestedImage.src = imageUrl;
-      // document.body.appendChild(requestedImage);
-      setResultImage(imageUrl);
-
-      // TODO: control status
-      message.success(`${file.name} file encoded successfully`);
-    } else if (type === "decode") {
-      console.log({ response });
-
-      // TODO: control status
-      message.success(`${file.name} file decoded successfully`);
+    if (type === Type.ENCODE) {
+      if (response.status) {
+        const imageUrl = `data:image/png;base64,${response.data}`;
+        setEncodedImage(imageUrl);
+        message.success(`${file.name} file encoded successfully`, 3);
+      } else {
+        message.error(response.data, 3);
+      }
+    } else if (type === Type.DECODE) {
+      if (response.status) {
+        setDecodedMessage(response.data);
+        message.success(`${file.name} file decoded successfully`, 3);
+      } else {
+        message.error(response.data, 3);
+      }
     }
 
     setLoading(false);
@@ -104,12 +108,20 @@ function Index({ type, title }) {
           {title}
         </Button>
       </Form.Item>
-      {resultImage && (
+      {type === Type.ENCODE && encodedImage && (
         <Row justify="center">
           <Typography.Text>Image {type}d successfully.&nbsp;</Typography.Text>
-          <Typography.Link href={resultImage} download>
+          <Typography.Link href={encodedImage} download>
             Click to Download
           </Typography.Link>
+        </Row>
+      )}
+      {type === Type.DECODE && decodedMessage && (
+        <Row justify="center">
+          <Typography.Text>Your secret message is:&nbsp;</Typography.Text>
+          <Typography.Text style={{ wordBreak: "break-word" }} copyable mark>
+            &nbsp;{decodedMessage}&nbsp;
+          </Typography.Text>
         </Row>
       )}
     </Form>
