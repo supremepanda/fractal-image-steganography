@@ -1,9 +1,5 @@
 from flask import Flask, request
 from flask_cors import CORS
-
-import sys
-sys.path.insert(1, 'backend')
-
 import steganography
 
 app = Flask(__name__)
@@ -11,7 +7,6 @@ CORS(app)
 
 @app.route("/encode", methods=['POST'])
 def encode():
-	print(request.args)
 	file = request.files['file']
 	secretKey = request.form['secretKey']
 	secretMessage = request.form['secretMessage']
