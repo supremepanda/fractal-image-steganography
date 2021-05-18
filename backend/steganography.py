@@ -63,8 +63,8 @@ def encode_image(image_path, secret_data, secret_key):
                 secret_data_index += 1
                 color_index += 1
 
-    # TODO: Change encoding file type to whatever it comes
-    output_image = base64.b64encode(cv2.imencode('.jpg', image)[1]).decode()
+    image_extension = f'.{image_path.content_type.split("/")[-1]}'
+    output_image = base64.b64encode(cv2.imencode(image_extension, image)[1]).decode()
 
     return {"status": True, "data": output_image}
 
