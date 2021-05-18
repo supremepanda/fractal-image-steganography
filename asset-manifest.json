@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/fractal-image-steganography/static/css/main.ded7f0a2.chunk.css",
+    "main.js": "/fractal-image-steganography/static/js/main.b3b24be3.chunk.js",
+    "main.js.map": "/fractal-image-steganography/static/js/main.b3b24be3.chunk.js.map",
+    "runtime-main.js": "/fractal-image-steganography/static/js/runtime-main.b3c73657.js",
+    "runtime-main.js.map": "/fractal-image-steganography/static/js/runtime-main.b3c73657.js.map",
+    "static/css/2.14c36052.chunk.css": "/fractal-image-steganography/static/css/2.14c36052.chunk.css",
+    "static/js/2.01aa3de6.chunk.js": "/fractal-image-steganography/static/js/2.01aa3de6.chunk.js",
+    "static/js/2.01aa3de6.chunk.js.map": "/fractal-image-steganography/static/js/2.01aa3de6.chunk.js.map",
+    "index.html": "/fractal-image-steganography/index.html",
+    "static/css/2.14c36052.chunk.css.map": "/fractal-image-steganography/static/css/2.14c36052.chunk.css.map",
+    "static/css/main.ded7f0a2.chunk.css.map": "/fractal-image-steganography/static/css/main.ded7f0a2.chunk.css.map",
+    "static/js/2.01aa3de6.chunk.js.LICENSE.txt": "/fractal-image-steganography/static/js/2.01aa3de6.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.b3c73657.js",
+    "static/css/2.14c36052.chunk.css",
+    "static/js/2.01aa3de6.chunk.js",
+    "static/css/main.ded7f0a2.chunk.css",
+    "static/js/main.b3b24be3.chunk.js"
+  ]
+}
