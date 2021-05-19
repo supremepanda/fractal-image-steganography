@@ -17,7 +17,7 @@ function Index() {
           it. To do that it converts all message, key and image information to
           binary format. For furthermore information please visit:&nbsp;
           <Link
-            href="https://github.com/supremepanda/fractal-image-steganography#understanding-the-theory-of-backend-side"
+            href="https://github.com/supremepanda/fractal-image-steganography#understanding-the-theory"
             target="_blank"
           >
             here
