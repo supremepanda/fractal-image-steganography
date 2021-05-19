@@ -1,5 +1,10 @@
 from flask import Flask, request
 from flask_cors import CORS
+
+# It handles importing problem to import our local directory
+import sys
+sys.path.insert(1, 'backend')
+
 from .steganography import encode_image, decode_image
 
 app = Flask(__name__, static_folder='build', static_url_path='')
