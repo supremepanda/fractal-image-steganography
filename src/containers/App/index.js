@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Layout, Col, Row, Card, Button } from "antd";
 import { GithubOutlined } from "@ant-design/icons";
 
@@ -26,6 +26,11 @@ const contentListNoTitle = {
 
 function App() {
   const [activePaneKey, setActivePaneKey] = useState(tabListNoTitle[0].key);
+
+  useEffect(() => {
+    // To start up Heroku server
+    fetch(`${process.env.REACT_APP_BASE_URL}/are-you-alive`);
+  }, []);
 
   return (
     <Layout style={{ minHeight: "100vh", paddingTop: 24 }}>
