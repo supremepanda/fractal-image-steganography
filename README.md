@@ -1,3 +1,5 @@
+[Go to Turkish README] (https://github.com/supremepanda/fractal-image-steganography/blob/master/README.tr.md)
+
 # Understanding the Theory of Backend Side
 
 Steganography is the art and science of storing information by embedding the message.
