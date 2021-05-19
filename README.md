@@ -1,6 +1,26 @@
-[Go to Turkish README](https://github.com/supremepanda/fractal-image-steganography/blob/master/README.tr.md)
+# Table Of Contents
 
-# Understanding the Theory of Backend Side
+- [Turkish/Türkçe Readme](https://github.com/supremepanda/fractal-image-steganography/blob/master/README.tr.md)
+- [Installation](#installation)
+- [Understanding the Theory](#understanding-the-theory)
+- [Concepts](#concepts)
+  - [Image Basics](#image-basics)
+  - [String Basics](#string-basics)
+- [Stenography Methods](#stenography-methods)
+  - [Converting To Binary](#converting-to-binary)
+  - [Encode the Image](#encode-the-image)
+  - [Decode the Image](#decode-the-image)
+- [Conclusion](#conclusion)
+
+# Installation
+
+You can visit our live example: [here](https://supremepanda.github.io/fractal-image-steganography/)
+
+But if you wish to run the project in your local. Please make sure you have `yarn`, `node` and necessary python packages that's written in `requirements.txt`.
+After this prerequisites in project directory write `yarn` or `npm install` then `yarn start-flask` that will be start the flask server then in the another terminal
+`yarn start` that will run the react app.
+
+# Understanding the Theory
 
 Steganography is the art and science of storing information by embedding the message.
 It comes from the Greek word «steganos».
@@ -11,13 +31,13 @@ Steganography is divided into two as Linguistics Steganography and Technical Ste
 The work we have done in this project is to embed text content in a picture and prevent the picture from changing visibly while doing this.
 We can say that the work done is bit-deep, since the picture content does not change noticeably.
 
-# Basic Concepts
+# Concepts
 
 `Binary` = is a 2 number system. It is expressed using 0 and 1.
 `Bit` = Bits have only two possible values: 0 and 1. Therefore, a binary number consists of 0 and 1 only.
 `Byte` = is a unit of measure consisting of 1 or 0 values along an 8-bit sequence.
 
-# Image Basics
+## Image Basics
 
 Embedding text in the picture and while doing this preventing the picture from changing noticeably, called RGB.
 We calculate with the numerical values of the colors "red", "green", "blue".
@@ -30,21 +50,21 @@ Each pixel has red, green and blue values in itself. These values are usually be
     green: 2
     blue: 100
 
-# String Basics
+## String Basics
 
 Another important type is "string". String is not a primitive type in structure and consists of `char`s, which are a primitive type.
 
 `1 char = 1 byte`
 
-# Stenography Method
+# Stenography Methods
 
-Basically 3 different functions are used in the project. These are 
+Basically 3 different functions are used in the project. These are
 
 - Convert To Binary
 - Encode the image with secret data
 - Decode the image
 
-# Converting To Binary
+## Converting To Binary
 
 It converts the given data to an 8-bit binary. In this way, since the "char" in the text and the "RGB" values in the picture are in the same format, they can be processed together.
 
@@ -64,7 +84,7 @@ Binary Convert Method:
     	else:
     		raise  TypeError("Type not supported.")
 
-# Encode the Image with Secret Data
+## Encode the Image
 
 There are basically two important conditions for the encoding process on the picture. These are:
 
@@ -86,7 +106,7 @@ It is necessary to put a sign that it is finished in our data to be stored. The 
 
 After that, the action starts with the conversion of 'secret_data' to binary format.
 
-	binary_secret_data = convert_to_binary(secret_data)
+    binary_secret_data = convert_to_binary(secret_data)
 
 After the Secret data is converted to binary format, we now need to write the data to be hidden in the picture. For this purpose, we should think of each pixel in a picture as lined up in rows, and we should know that each pixel also has RGB value.
 
@@ -96,7 +116,6 @@ The method used is; applied to each of the "red", "green" and "blue" values in t
 
 For example: let our red value be 255 as decimal. 8-bit binary equivalent of 255 ** 11111111 **. The first bit of the data we want to hide is ** 0 **. Our new `red` value will be 1111111 ** 0 **. This process continues until the data we store is exhausted.
 
-                
                 secret_data_index = 0
                 data_len = len(binary_secret_data)
                 for row in image:
@@ -111,7 +130,7 @@ For example: let our red value be 255 as decimal. 8-bit binary equivalent of 255
                 secret_data_index += 1
                 color_index += 1
 
-# Decode the Image
+## Decode the Image
 
 With the decoding process, we can reveal the content of the text that we have hidden in our picture. In order to decode, it is necessary to know how it is encoded. In our encode application, we used the way of hiding data to the last bit of RGB values in pixels. At the end, we showed that it was done by using 'secret_key'. At this stage, what will be done is to set up a simple search algorithm according to this rule.
 
@@ -124,7 +143,7 @@ First of all, we collect all the bits of the picture in our hands, since we are 
     		    binary_secret_data += green[-1]
     		    binary_secret_data += blue[-1]
 
-Then we need to split the binary data into 8-bit format. This is because every  byte which has 8-bit, split will be one character, and those characters will be part of our hidden data.
+Then we need to split the binary data into 8-bit format. This is because every byte which has 8-bit, split will be one character, and those characters will be part of our hidden data.
 
     all_bytes = [ binary_secret_data[i: i+8] for  i  in  range(0, len(binary_secret_data), 8) ]
     decoded_data = ""
@@ -134,15 +153,8 @@ Then we need to split the binary data into 8-bit format. This is because every  
     		break
     return  decoded_data[:-len(secret_key)]
 
-
-# In Conclusion
+# Conclusion
 
 In order to realize the Steganography, we first convert the text to char and the image to RGB format. In this way, we can work on them together. Then, by performing the encoding process, we protect the content of the picture and ensure that the data is recorded.
 By giving a "secret key" to the end of our data to be stored, we decide where the data will end. Then we compare the size of the image and the size of the data to be embedded to make sure the text can be embedded.
 In the decode process, we ensure that the data we embed in the picture can be displayed again.
-
-
-
-
-
-
