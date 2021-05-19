@@ -1,4 +1,4 @@
-[Go to Turkish README] (https://github.com/supremepanda/fractal-image-steganography/blob/master/README.tr.md)
+[Go to Turkish README](https://github.com/supremepanda/fractal-image-steganography/blob/master/README.tr.md)
 
 # Understanding the Theory of Backend Side
 
