@@ -1,6 +1,6 @@
 from flask import Flask, request
 from flask_cors import CORS
-import steganography
+from .steganography import encode_image, decode_image
 
 app = Flask(__name__, static_folder='build', static_url_path='')
 CORS(app)
@@ -11,7 +11,7 @@ def encode():
 	secretKey = request.form['secretKey']
 	secretMessage = request.form['secretMessage']
 
-	requestObj = steganography.encode_image(file, secretMessage, secretKey)
+	requestObj = encode_image(file, secretMessage, secretKey)
 	response = { "status": requestObj['status'], 'data': requestObj['data'] }
 
 	return response
@@ -21,7 +21,7 @@ def decode():
 	file = request.files['file']
 	secretKey = request.form['secretKey']
 
-	requestObj = steganography.decode_image(file, secretKey)
+	requestObj = decode_image(file, secretKey)
 	response = { "status": requestObj['status'], 'data': requestObj['data'] }
 
 	return response
