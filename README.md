@@ -14,7 +14,7 @@
 - [Conclusion](#conclusion)
 
 # TO DO
-<input type="checkbox" disabled/> Data encryption and decryption functions that they are transfer operations between user and API functions will be added soon.
+unchecked # [checkbox:unchecked] Data encryption and decryption functions that they are transfer operations between user and API functions will be added soon.
 
 # Installation
 
