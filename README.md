@@ -1,6 +1,7 @@
 # Table Of Contents
 
 - [Turkish/Türkçe Readme](https://github.com/supremepanda/fractal-image-steganography/blob/master/README.tr.md)
+- [TODO](#to-do)
 - [Installation](#installation)
 - [Understanding the Theory](#understanding-the-theory)
 - [Concepts](#concepts)
@@ -11,6 +12,9 @@
   - [Encode the Image](#encode-the-image)
   - [Decode the Image](#decode-the-image)
 - [Conclusion](#conclusion)
+
+# TO DO
+<input type="checkbox" disabled/> Data encryption and decryption functions that they are transfer operations between user and API functions will be added soon.
 
 # Installation
 
