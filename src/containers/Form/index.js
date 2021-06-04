@@ -76,10 +76,18 @@ function Index({ type, title }) {
             <Form.Item
               name="secretMessage"
               rules={[
-                { required: true, message: "Please enter a secret message" },
+                {
+                  required: true,
+                  message: "Please enter the secret message",
+                },
+                {
+                  required: true,
+                  message: "Please enter only ASCII characters",
+                  pattern: /^[\x00-\x7F]*$/,
+                },
               ]}
             >
-              <Input.Password
+              <Input
                 placeholder="Secret message"
                 prefix={<InboxOutlined />}
                 type="text"
@@ -90,9 +98,19 @@ function Index({ type, title }) {
         <Col span={type === "decode" ? 24 : 12}>
           <Form.Item
             name="secretKey"
-            rules={[{ required: true, message: "Please enter the secret key" }]}
+            rules={[
+              {
+                required: true,
+                message: "Please enter the secret key",
+              },
+              {
+                required: true,
+                message: "Please enter only ASCII characters",
+                pattern: /^[\x00-\x7F]*$/,
+              },
+            ]}
           >
-            <Input.Password
+            <Input
               placeholder="Secret key"
               prefix={<InboxOutlined />}
               type="text"
