@@ -129,7 +129,10 @@ function Index({ type, title }) {
       {type === Type.ENCODE && encodedImage && (
         <Row justify="center">
           <Typography.Text>Image {type}d successfully.&nbsp;</Typography.Text>
-          <Typography.Link href={encodedImage} download>
+          <Typography.Link
+            href={encodedImage}
+            download={`encoded_${file?.name}`}
+          >
             Click to Download
           </Typography.Link>
         </Row>

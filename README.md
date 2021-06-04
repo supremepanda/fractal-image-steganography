@@ -16,8 +16,8 @@
 
 # TO DO
 
-- [ ] Data encryption and decryption functions that they are transfer operations between user and API functions will be added soon.
-- [ ] Namification problem of download image will be fixed.
+- [ ] Data encryption and decryption functions that they are transfer operations between user and API functions.
+- [x] Namification problem of download image.
 
 # Installation
 
