@@ -26,7 +26,8 @@ function Index() {
         <Alert
           message="How it works?"
           description="Select/Drag & Drop your image to decode or encode. Enter your `secret message`
-          and `secret key` for encoding. And keep the `secret key` for decoding the message for later"
+          and `secret key` for encoding. And keep the `secret key` for decoding the message for later.
+          Note: This system only works with ASCII characters."
           type="info"
           showIcon
         />
