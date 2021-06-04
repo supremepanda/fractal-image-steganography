@@ -2,6 +2,7 @@
 
 - [Turkish/Türkçe Readme](https://github.com/supremepanda/fractal-image-steganography/blob/master/README.tr.md)
 - [TODO](#to-do)
+- [IMPORTANT NOTE](#important-note)
 - [Installation](#installation)
 - [Understanding the Theory](#understanding-the-theory)
 - [Concepts](#concepts)
@@ -15,6 +16,10 @@
 
 # TO DO
 - [ ] Data encryption and decryption functions that they are transfer operations between user and API functions will be added soon.
+- [ ] Namification problem of download image will be fixed.
+
+# IMPORTANT NOTE!!
+This project is only work with ASCII characters for now. Otherwise, the server will be response message as "Secret key wrong!"
 
 # Installation
 
