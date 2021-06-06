@@ -16,8 +16,8 @@ function Index({ onUpload }) {
   const handleBeforeUpload = (file) => {
     const isValid = checkFileType(
       file,
-      ["image/jpg", "image/png", "image/jpeg"],
-      "You can only upload JPG/PNG file!"
+      ["image/png"],
+      "You can only upload PNG file!"
     );
 
     return isValid ? isValid : Upload.LIST_IGNORE;
