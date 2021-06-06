@@ -1,8 +1,8 @@
 # Table Of Contents
 
 - [Turkish/Türkçe Readme](https://github.com/supremepanda/fractal-image-steganography/blob/master/README.tr.md)
+- [Bugs to Fix](#bugs-to-fix)
 - [TODO](#to-do)
-- [IMPORTANT NOTE](#important-note)
 - [Installation](#installation)
 - [Understanding the Theory](#understanding-the-theory)
 - [Concepts](#concepts)
@@ -13,6 +13,9 @@
   - [Encode the Image](#encode-the-image)
   - [Decode the Image](#decode-the-image)
 - [Conclusion](#conclusion)
+
+# Bugs to Fix
+- [ ] .jpg causes `Secret Key Wrong` error.
 
 # TO DO
 
