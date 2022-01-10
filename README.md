@@ -15,11 +15,11 @@
 - [Conclusion](#conclusion)
 
 # Bugs to Fix
-- [ ] .jpg causes `Secret Key Wrong` error.
+- [x] .jpg causes `Secret Key Wrong` error.
 
 # TO DO
 
-- [ ] Data encryption and decryption functions that they are transfer operations between user and API functions.
+- [x] Data encryption and decryption functions that they are transfer operations between user and API functions.
 - [x] Namification problem of download image.
 
 # Installation
